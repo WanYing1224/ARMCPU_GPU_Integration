@@ -1,0 +1,384 @@
+#!/usr/bin/perl
+# fifoctl - Control and test Convertible FIFO on NetFPGA
+# Lab 9 version: adds GPU2 (programmable GPU) support
+#
+# Usage:
+#   fifoctl status       - Read FIFO status
+#   fifoctl capture      - Set mode to FIFO_IN (capture packets)
+#   fifoctl proc         - Set mode to PROC (processor access)
+#   fifoctl send         - Set mode to FIFO_OUT (send packet)
+#   fifoctl idle         - Set mode to IDLE
+#   fifoctl reset        - Reset FIFO pointers
+#   fifoctl read <addr>  - Read BRAM word at address
+#   fifoctl readall      - Read all words in captured packet
+#   fifoctl write <addr> <data_hi> <data_lo> <ctrl> - Write BRAM word
+#   fifoctl arm_run      - Run ARM processor
+#   fifoctl gpu_run      - Run Lab 8 fixed GPU
+#   fifoctl gpu2_sel     - Switch Port B to GPU2 data memory
+#   fifoctl bram_sel     - Switch Port B back to FIFO BRAM
+#   fifoctl gpu2_write <word_addr> <hi> <lo> - Write GPU2 dmem
+#   fifoctl gpu2_read  <word_addr>           - Read GPU2 dmem
+#   fifoctl gpu2_run     - Run GPU2 (programmable bf16_fma)
+#   fifoctl demo         - Full Lab 9 joint demo (ARM + GPU2)
+
+use strict;
+use warnings;
+
+# ============================================================
+# Register addresses — Lab 9
+# Base: 0x2000100 (FIFO block, blocksize=256, instance base 0x2000000)
+#
+# SW regs (6 total, each +4):
+#   SW0  CMD         = 0x2000100
+#   SW1  PROC_ADDR   = 0x2000104
+#   SW2  WDATA_HI    = 0x2000108
+#   SW3  WDATA_LO    = 0x200010C
+#   SW4  WDATA_CTRL  = 0x2000110
+#   SW5  RDATA_SEL   = 0x2000114  ← NEW in Lab 9
+#
+# HW regs (5 total, shifted +4 vs Lab 8 due to new SW reg):
+#   HW0  STATUS      = 0x2000118  (was 0x2000114 in Lab 8)
+#   HW1  RDATA_HI    = 0x200011C  (was 0x2000118)
+#   HW2  RDATA_LO    = 0x2000120  (was 0x200011C)
+#   HW3  RDATA_CTRL  = 0x2000124  (was 0x2000120)
+#   HW4  POINTERS    = 0x2000128  (was 0x2000124)
+# ============================================================
+
+my $CMD_REG        = 0x2000100;
+my $PROC_ADDR_REG  = 0x2000104;
+my $WDATA_HI_REG   = 0x2000108;
+my $WDATA_LO_REG   = 0x200010C;
+my $WDATA_CTRL_REG = 0x2000110;
+my $RDATA_SEL_REG  = 0x2000114;   # LAB9 NEW
+my $STATUS_REG     = 0x2000118;   # shifted +4
+my $RDATA_HI_REG   = 0x200011C;   # shifted +4
+my $RDATA_LO_REG   = 0x2000120;   # shifted +4
+my $RDATA_CTRL_REG = 0x2000124;   # shifted +4
+my $PSTATUS_REG    = 0x2000128;   # shifted +4
+
+# CMD bit masks
+my $CMD_RESET     = 0x04;
+my $CMD_ARM_START = 0x08;
+my $CMD_GPU_START = 0x10;
+my $CMD_GPU2_START= 0x20;   # LAB9
+my $CMD_PROC      = 0x01;
+my $CMD_OUT       = 0x02;
+my $CMD_IN        = 0x03;
+
+# PROC_STATUS bit masks
+my $ST_ARM_DONE   = 0x01;
+my $ST_ARM_RUN    = 0x02;
+my $ST_GPU_DONE   = 0x04;
+my $ST_GPU_RUN    = 0x08;
+my $ST_GPU2_DONE  = 0x10;   # LAB9
+my $ST_GPU2_RUN   = 0x20;   # LAB9
+
+# ============================================================
+# Low-level helpers
+# ============================================================
+sub regwrite {
+    my ($addr, $val) = @_;
+    system(sprintf("regwrite 0x%08x 0x%08x", $addr, $val));
+}
+
+sub regread_val {
+    my ($addr) = @_;
+    my $result = `regread 0x@{[sprintf("%08x", $addr)]}`;
+    if ($result =~ /:\s*(0x[0-9a-fA-F]+)/) {
+        return hex($1);
+    }
+    return 0;
+}
+
+# ============================================================
+# Status display
+# ============================================================
+sub read_status {
+    my $status = regread_val($STATUS_REG);
+    my $mode      = $status & 0x3;
+    my $pkt_ready = ($status >> 2) & 0x1;
+    my $pkt_len   = ($status >> 8) & 0xFF;
+
+    my $pstatus     = regread_val($PSTATUS_REG);
+    my $arm_done    = ($pstatus >> 0) & 0x1;
+    my $arm_running = ($pstatus >> 1) & 0x1;
+    my $gpu_done    = ($pstatus >> 2) & 0x1;
+    my $gpu_running = ($pstatus >> 3) & 0x1;
+    my $gpu2_done   = ($pstatus >> 4) & 0x1;   # LAB9
+    my $gpu2_running= ($pstatus >> 5) & 0x1;   # LAB9
+    my $tail        = ($pstatus >> 8) & 0xFF;
+    my $head        = ($pstatus >> 16) & 0xFF;
+
+    my $rsel = regread_val($RDATA_SEL_REG) & 0x1;
+
+    my @modes = ("IDLE", "PROC", "FIFO_OUT", "FIFO_IN");
+    printf("Status: mode=%s  pkt_ready=%d  pkt_len=%d  head=%d  tail=%d\n",
+           $modes[$mode], $pkt_ready, $pkt_len, $head, $tail);
+    printf("  ARM:  running=%d done=%d\n", $arm_running, $arm_done);
+    printf("  GPU:  running=%d done=%d\n", $gpu_running, $gpu_done);
+    printf("  GPU2: running=%d done=%d\n", $gpu2_running, $gpu2_done);
+    printf("  Port B target: %s\n", $rsel ? "GPU2 dmem" : "FIFO BRAM");
+    return ($mode, $pkt_ready, $pkt_len, $head, $tail);
+}
+
+# ============================================================
+# BRAM read/write (Port B → FIFO BRAM, rdata_sel=0)
+# ============================================================
+my $write_toggle = 0;
+
+sub read_bram {
+    my ($addr) = @_;
+    regwrite($PROC_ADDR_REG, $addr);
+    select(undef, undef, undef, 0.01);
+    my $hi   = regread_val($RDATA_HI_REG);
+    my $lo   = regread_val($RDATA_LO_REG);
+    my $ctrl = regread_val($RDATA_CTRL_REG) & 0xFF;
+    return ($ctrl, $hi, $lo);
+}
+
+sub write_bram {
+    my ($addr, $data_hi, $data_lo, $ctrl) = @_;
+    $write_toggle ^= 0x100;
+    regwrite($PROC_ADDR_REG,  $addr);
+    regwrite($WDATA_HI_REG,   $data_hi);
+    regwrite($WDATA_LO_REG,   $data_lo);
+    regwrite($WDATA_CTRL_REG, ($ctrl & 0xFF) | $write_toggle);
+}
+
+# ============================================================
+# GPU2 dmem read/write (Port B → GPU2 dmem, rdata_sel=1)
+# ============================================================
+sub gpu2_read_word {
+    my ($word_addr) = @_;
+    regwrite($PROC_ADDR_REG, $word_addr);
+    select(undef, undef, undef, 0.01);
+    my $hi = regread_val($RDATA_HI_REG);
+    my $lo = regread_val($RDATA_LO_REG);
+    return ($hi, $lo);
+}
+
+sub gpu2_write_word {
+    my ($word_addr, $hi, $lo) = @_;
+    $write_toggle ^= 0x100;
+    regwrite($PROC_ADDR_REG,  $word_addr);
+    regwrite($WDATA_HI_REG,   $hi);
+    regwrite($WDATA_LO_REG,   $lo);
+    regwrite($WDATA_CTRL_REG, $write_toggle);
+}
+
+# ============================================================
+# Poll PROC_STATUS bit with timeout
+# ============================================================
+sub poll_bit {
+    my ($bit_mask, $label, $timeout_ms) = @_;
+    $timeout_ms //= 5000;
+    my $iters = int($timeout_ms / 50);
+    for my $i (1..$iters) {
+        my $ps = regread_val($PSTATUS_REG);
+        if ($ps & $bit_mask) {
+            printf("  %s done (poll %d)\n", $label, $i);
+            return 1;
+        }
+        select(undef, undef, undef, 0.05);
+    }
+    print "  TIMEOUT waiting for $label!\n";
+    return 0;
+}
+
+# ============================================================
+# Command dispatch
+# ============================================================
+my $cmd = $ARGV[0] || 'status';
+
+if ($cmd eq 'status') {
+    read_status();
+}
+elsif ($cmd eq 'capture') {
+    regwrite($CMD_REG, $CMD_IN);
+    print "Mode set to FIFO_IN (capturing packets)\n";
+}
+elsif ($cmd eq 'proc') {
+    regwrite($CMD_REG, $CMD_PROC);
+    print "Mode set to PROC\n";
+}
+elsif ($cmd eq 'send') {
+    regwrite($CMD_REG, $CMD_OUT);
+    print "Mode set to FIFO_OUT (sending packet)\n";
+}
+elsif ($cmd eq 'idle') {
+    regwrite($CMD_REG, 0x00);
+    print "Mode set to IDLE (passthrough)\n";
+}
+elsif ($cmd eq 'reset') {
+    regwrite($CMD_REG, $CMD_RESET);
+    select(undef, undef, undef, 0.05);
+    regwrite($CMD_REG, 0x00);
+    print "FIFO reset done\n";
+    read_status();
+}
+elsif ($cmd eq 'read') {
+    my $addr = $ARGV[1] // 0;
+    regwrite($RDATA_SEL_REG, 0x0);   # FIFO BRAM
+    regwrite($CMD_REG, $CMD_PROC);
+    my ($ctrl, $hi, $lo) = read_bram($addr);
+    printf("bram[%d] ctrl=%02x data=%08x_%08x\n", $addr, $ctrl, $hi, $lo);
+}
+elsif ($cmd eq 'readall') {
+    regwrite($RDATA_SEL_REG, 0x0);
+    regwrite($CMD_REG, $CMD_PROC);
+    my ($mode, $pkt_ready, $pkt_len, $head, $tail) = read_status();
+    if ($pkt_len == 0) {
+        print "No packet captured.\n";
+    } else {
+        print "=== Packet Contents ($pkt_len words) ===\n";
+        for my $i (0 .. $pkt_len - 1) {
+            my ($ctrl, $hi, $lo) = read_bram($i);
+            printf("  [%2d] ctrl=%02x data=%08x_%08x\n", $i, $ctrl, $hi, $lo);
+        }
+    }
+}
+elsif ($cmd eq 'write') {
+    my $addr    = hex($ARGV[1] // "0");
+    my $data_hi = hex($ARGV[2] // "0");
+    my $data_lo = hex($ARGV[3] // "0");
+    my $ctrl    = hex($ARGV[4] // "0");
+    regwrite($RDATA_SEL_REG, 0x0);
+    regwrite($CMD_REG, $CMD_PROC);
+    write_bram($addr, $data_hi, $data_lo, $ctrl);
+    printf("Wrote bram[%d] ctrl=%02x data=%08x_%08x\n",
+           $addr, $ctrl, $data_hi, $data_lo);
+}
+elsif ($cmd eq 'arm_run') {
+    print "Starting ARM network processor...\n";
+    regwrite($CMD_REG, $CMD_PROC);
+    select(undef, undef, undef, 0.05);
+    regwrite($CMD_REG, $CMD_PROC | $CMD_ARM_START);
+    select(undef, undef, undef, 0.05);
+    regwrite($CMD_REG, $CMD_PROC);
+    poll_bit($ST_ARM_DONE, "ARM");
+    read_status();
+}
+elsif ($cmd eq 'gpu_run') {
+    print "Starting Lab 8 GPU tensor processor...\n";
+    regwrite($CMD_REG, $CMD_PROC);
+    select(undef, undef, undef, 0.05);
+    regwrite($CMD_REG, $CMD_PROC | $CMD_GPU_START);
+    select(undef, undef, undef, 0.05);
+    regwrite($CMD_REG, $CMD_PROC);
+    poll_bit($ST_GPU_DONE, "GPU");
+    read_status();
+}
+elsif ($cmd eq 'gpu2_sel') {
+    regwrite($RDATA_SEL_REG, 0x1);
+    print "Port B switched to GPU2 data memory\n";
+}
+elsif ($cmd eq 'bram_sel') {
+    regwrite($RDATA_SEL_REG, 0x0);
+    print "Port B switched to FIFO BRAM\n";
+}
+elsif ($cmd eq 'gpu2_write') {
+    my $word_addr = hex($ARGV[1] // "0");
+    my $hi        = hex($ARGV[2] // "0");
+    my $lo        = hex($ARGV[3] // "0");
+    regwrite($RDATA_SEL_REG, 0x1);
+    gpu2_write_word($word_addr, $hi, $lo);
+    printf("GPU2 dmem[%d] = %08x_%08x\n", $word_addr, $hi, $lo);
+}
+elsif ($cmd eq 'gpu2_read') {
+    my $word_addr = hex($ARGV[1] // "0");
+    regwrite($RDATA_SEL_REG, 0x1);
+    my ($hi, $lo) = gpu2_read_word($word_addr);
+    printf("GPU2 dmem[%d] = %08x_%08x\n", $word_addr, $hi, $lo);
+}
+elsif ($cmd eq 'gpu2_run') {
+    print "Starting GPU2 (programmable bf16_fma)...\n";
+    regwrite($CMD_REG, $CMD_PROC | $CMD_GPU2_START);
+    select(undef, undef, undef, 0.05);
+    regwrite($CMD_REG, $CMD_PROC);
+    poll_bit($ST_GPU2_DONE, "GPU2");
+    read_status();
+}
+elsif ($cmd eq 'demo') {
+    print "=== Lab 9 Joint Demo: ARM + GPU2 pipeline ===\n\n";
+
+    # Step 1: Reset
+    print "[1] Reset\n";
+    regwrite($CMD_REG, $CMD_RESET);
+    select(undef, undef, undef, 0.1);
+    regwrite($CMD_REG, 0x00);
+    regwrite($RDATA_SEL_REG, 0x0);
+
+    # Step 2: Capture packet
+    print "[2] Capture packet (send a ping: ping -c 1 \$n0)\n";
+    regwrite($CMD_REG, $CMD_IN);
+    print "     Press Enter when ping is sent...";
+    <STDIN>;
+    regwrite($CMD_REG, $CMD_PROC);
+    read_status();
+
+    my ($mode, $pkt_ready, $pkt_len) = read_status();
+    die "No packet captured\n" unless $pkt_ready;
+
+    # Step 3: Show original
+    print "\n[3] Original packet\n";
+    for my $i (0 .. $pkt_len-1) {
+        my ($ctrl, $hi, $lo) = read_bram($i);
+        printf("  [%2d] ctrl=%02x data=%08x_%08x\n", $i, $ctrl, $hi, $lo);
+    }
+
+    # Step 4: ARM run
+    print "\n[4] ARM processing (header +1 per 32-bit word)\n";
+    regwrite($CMD_REG, $CMD_PROC | $CMD_ARM_START);
+    select(undef, undef, undef, 0.05);
+    regwrite($CMD_REG, $CMD_PROC);
+    poll_bit($ST_ARM_DONE, "ARM");
+
+    print "  After ARM (words 0-3):\n";
+    for my $i (0..3) {
+        my ($ctrl, $hi, $lo) = read_bram($i);
+        printf("  [%2d] ctrl=%02x data=%08x_%08x\n", $i, $ctrl, $hi, $lo);
+    }
+
+    # Step 5: Load BF16 vectors into GPU2 dmem
+    print "\n[5] Loading BF16 vectors into GPU2 dmem\n";
+    regwrite($RDATA_SEL_REG, 0x1);  # select GPU2 dmem
+    gpu2_write_word(0, 0x40004000, 0x40004000);  # A=2.0x4
+    gpu2_write_word(1, 0x3FC03FC0, 0x3FC03FC0);  # B=1.5x4
+    gpu2_write_word(2, 0x3F003F00, 0x3F003F00);  # C=0.5x4
+    print "  Vec A=2.0, Vec B=1.5, Vec C=0.5 written\n";
+
+    # Step 6: GPU2 run
+    print "\n[6] GPU2 running: BF_MAC(2.0, 1.5, 0.5) = 3.5 per lane\n";
+    regwrite($CMD_REG, $CMD_PROC | $CMD_GPU2_START);
+    select(undef, undef, undef, 0.05);
+    regwrite($CMD_REG, $CMD_PROC);
+    poll_bit($ST_GPU2_DONE, "GPU2");
+
+    my ($res_hi, $res_lo) = gpu2_read_word(0);
+    printf("  GPU2 result: %08x_%08x", $res_hi, $res_lo);
+    if ($res_hi == 0x40604060 && $res_lo == 0x40604060) {
+        print "  ← PASS (3.5 x4)\n";
+    } else {
+        print "  ← expected 40604060_40604060\n";
+    }
+
+    # Step 7: Write result back to BRAM
+    print "\n[7] Writing GPU2 result to FIFO BRAM word 5\n";
+    regwrite($RDATA_SEL_REG, 0x0);  # back to FIFO BRAM
+    write_bram(5, $res_hi, $res_lo, 0x00);
+
+    # Step 8: Send
+    print "\n[8] Sending modified packet\n";
+    regwrite($CMD_REG, $CMD_OUT);
+    select(undef, undef, undef, 0.5);
+    regwrite($CMD_REG, 0x00);
+
+    print "\n=== Lab 9 Demo Complete ===\n";
+}
+else {
+    print "Usage: fifoctl {status|capture|proc|send|idle|reset\n";
+    print "               read|readall|write\n";
+    print "               arm_run|gpu_run\n";
+    print "               gpu2_sel|bram_sel|gpu2_read|gpu2_write|gpu2_run\n";
+    print "               demo}\n";
+}

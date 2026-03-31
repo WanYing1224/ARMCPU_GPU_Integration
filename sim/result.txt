@@ -1,0 +1,58 @@
+# ================================================================
+#   Lab 8 Integration TB: ARM CPU + GPU BF16 Tensor Core
+# ================================================================
+# 
+# [1] Reset
+#     done
+# 
+# [2] Program ARM IMEM
+#     ARM IMEM loaded
+# 
+# [3] Program ARM DMEM  (values 0 .. 13)
+#     ARM DMEM loaded
+# 
+# [4] Release ARM and start execution
+#     waiting for arm_cpu_done...
+#     arm_cpu_done asserted after 33 cycles
+# [4b] Verify ARM DMEM results (expect 1 .. 14)
+#   FAIL  dmem[0]  expected=1  got=0x00000000
+#   FAIL  dmem[1]  expected=2  got=0x00000001
+#   FAIL  dmem[2]  expected=3  got=0x00000002
+#   FAIL  dmem[3]  expected=4  got=0x00000003
+#   FAIL  dmem[4]  expected=5  got=0x00000004
+#   FAIL  dmem[5]  expected=6  got=0x00000005
+#   FAIL  dmem[6]  expected=7  got=0x00000006
+#   FAIL  dmem[7]  expected=8  got=0x00000007
+#   FAIL  dmem[8]  expected=9  got=0x00000008
+#   FAIL  dmem[9]  expected=10  got=0x00000009
+#   FAIL  dmem[10]  expected=11  got=0x0000000a
+#   FAIL  dmem[11]  expected=12  got=0x0000000b
+#   FAIL  dmem[12]  expected=13  got=0x0000000c
+#   FAIL  dmem[13]  expected=14  got=0x0000000d
+# 
+# [5] Program GPU IMEM (BF_MAC kernel, 6 instructions)
+#     GPU IMEM loaded
+# 
+# [6] Load GPU operands into shared FIFO BRAM
+#     BRAM[0] = VecA: 4 x 2.0  BF16=0x4000 -> 0x4000400040004000
+#     BRAM[1] = VecB: 4 x 1.5  BF16=0x3FC0 -> 0x3FC03FC03FC03FC0
+#     BRAM[2] = VecC: 4 x 0.5  BF16=0x3F00 -> 0x3F003F003F003F00
+#     Expected result: 2.0*1.5+0.5=3.5  BF16=0x4060
+#                      4 lanes: 0x4060406040604060
+#   PASS  VecA BRAM[0] write verify
+#   PASS  VecB BRAM[1] write verify
+#   PASS  VecC BRAM[2] write verify
+# 
+# [7] Release GPU and start execution
+#     waiting for gpu_done...
+#     gpu_done asserted after 39 cycles
+# [8] Verify GPU BF_MAC result at BRAM[0]
+#   PASS  GPU BF_MAC 2.0*1.5+0.5=3.5
+# 
+# ================================================================
+#   PASS: 4   FAIL: 14
+# ================================================================
+#   FAILURES detected â inspect waveform for details
+# 
+# ** Note: $finish    : C:/USC CE/EE533/Lab10/Integration_2/testbench/fifo_top_tb.v(471)
+#    Time: 1986 ns  Iteration: 0  Instance: /fifo_top_tb
