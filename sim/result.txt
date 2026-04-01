@@ -13,22 +13,22 @@
 # 
 # [4] Release ARM and start execution
 #     waiting for arm_cpu_done...
-#     arm_cpu_done asserted after 33 cycles
+#     arm_cpu_done asserted after 601 cycles
 # [4b] Verify ARM DMEM results (expect 1 .. 14)
-#   FAIL  dmem[0]  expected=1  got=0x00000000
-#   FAIL  dmem[1]  expected=2  got=0x00000001
-#   FAIL  dmem[2]  expected=3  got=0x00000002
-#   FAIL  dmem[3]  expected=4  got=0x00000003
-#   FAIL  dmem[4]  expected=5  got=0x00000004
-#   FAIL  dmem[5]  expected=6  got=0x00000005
-#   FAIL  dmem[6]  expected=7  got=0x00000006
-#   FAIL  dmem[7]  expected=8  got=0x00000007
-#   FAIL  dmem[8]  expected=9  got=0x00000008
-#   FAIL  dmem[9]  expected=10  got=0x00000009
-#   FAIL  dmem[10]  expected=11  got=0x0000000a
-#   FAIL  dmem[11]  expected=12  got=0x0000000b
-#   FAIL  dmem[12]  expected=13  got=0x0000000c
-#   FAIL  dmem[13]  expected=14  got=0x0000000d
+#   FAIL  dmem[0]  expected=1  got=0xxxxxxxxx
+#   FAIL  dmem[1]  expected=2  got=0xxxxxxxxx
+#   FAIL  dmem[2]  expected=3  got=0xxxxxxxxx
+#   FAIL  dmem[3]  expected=4  got=0xxxxxxxxx
+#   FAIL  dmem[4]  expected=5  got=0xxxxxxxxx
+#   FAIL  dmem[5]  expected=6  got=0xxxxxxxxx
+#   FAIL  dmem[6]  expected=7  got=0xxxxxxxxx
+#   FAIL  dmem[7]  expected=8  got=0xxxxxxxxx
+#   FAIL  dmem[8]  expected=9  got=0xxxxxxxxx
+#   FAIL  dmem[9]  expected=10  got=0xxxxxxxxx
+#   FAIL  dmem[10]  expected=11  got=0xxxxxxxxx
+#   FAIL  dmem[11]  expected=12  got=0xxxxxxxxx
+#   FAIL  dmem[12]  expected=13  got=0xxxxxxxxx
+#   FAIL  dmem[13]  expected=14  got=0xxxxxxxxx
 # 
 # [5] Program GPU IMEM (BF_MAC kernel, 6 instructions)
 #     GPU IMEM loaded
@@ -54,5 +54,5 @@
 # ================================================================
 #   FAILURES detected â inspect waveform for details
 # 
-# ** Note: $finish    : C:/USC CE/EE533/Lab10/Integration_2/testbench/fifo_top_tb.v(471)
-#    Time: 1986 ns  Iteration: 0  Instance: /fifo_top_tb
+# ** Note: $finish    : C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/testbench/fifo_top_tb.v(472)
+#    Time: 7656 ns  Iteration: 0  Instance: /fifo_top_tb

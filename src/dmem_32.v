@@ -39,8 +39,12 @@ module dmem_32 (
     reg [31:0] mem [0:255];
 
     always @(posedge clka) begin
-        if (wea) mem[addra] <= dina;
-        douta <= mem[addra];
+        if (wea) begin
+            mem[addra] <= dina;
+            douta <= dina;        // write-first: LDR after STR same addr gets new value
+        end else begin
+            douta <= mem[addra];
+        end
     end
 
     always @(posedge clkb) begin

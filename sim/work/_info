@@ -7,305 +7,336 @@ z2
 !i10e 25
 !i10f 100
 cModel Technology
-dC:/USC CE/EE533/Lab7/CustomGPU_ANN_Accelerator/simulation
+Z0 dC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/sim
+T_opt
+!s110 1775007819
+VFF:d8JMhJ]CBVK8@=Mk<e0
+04 11 4 work fifo_top_tb fast 0
+=1-20c19bca69c1-69cc784b-250-c4e0
+o-quiet -auto_acc_if_foreign -work work
+Z1 tCvgOpt 0
+n@_opt
+OL;O;10.6e;65
+R0
 varm_alu
-Z0 VDg1SIo80bB@j0V0VzS_@n1
+Z2 VDg1SIo80bB@j0V0VzS_@n1
 r1
 !s85 0
 31
 !i10b 1
 !s100 8Ch2mTf`fRH4:GoWcjS>42
-I=k7zb15ChKQ>oOlLOmlmn1
-Z1 dC:/USC CE/EE533/Lab10/Integration_2/sim
-w1774920454
-8C:/USC CE/EE533/Lab10/Integration_2/src/arm_alu.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/arm_alu.v
-L0 25
-Z2 OL;L;10.6e;65
-Z3 !s108 1774938423.000000
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/arm_alu.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/arm_alu.v|
-!i113 0
-Z4 o-work work -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
-Z5 tCvgOpt 0
-varm_cpu_wrapper
+IGz;[SeB54k^]kKQH^8PWd2
 R0
+Z3 w1774992567
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_alu.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_alu.v
+L0 25
+Z4 OL;L;10.6e;65
+Z5 !s108 1775008603.000000
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_alu.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_alu.v|
+!i113 0
+Z6 o-work work -L mtiAvm -L mtiRnm -L mtiOvm -L mtiUvm -L mtiUPF -L infact
+R1
+varm_cpu_wrapper
+R2
 r1
 !s85 0
 31
 !i10b 1
 !s100 T<jL4hJ1GJFRg38zLTfaU3
-I9>BhUKj^4>P:`cDHl3BA32
-R1
-w1774938096
-8C:/USC CE/EE533/Lab10/Integration_2/src/arm_cpu_wrapper.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/arm_cpu_wrapper.v
+I5F1m`Cg]<5H=8?FQH^bnQ3
+R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_cpu_wrapper.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_cpu_wrapper.v
 L0 34
-R2
-R3
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/arm_cpu_wrapper.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/arm_cpu_wrapper.v|
-!i113 0
 R4
 R5
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_cpu_wrapper.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_cpu_wrapper.v|
+!i113 0
+R6
+R1
 varm_pipeline
-R0
+R2
 r1
 !s85 0
 31
 !i10b 1
-!s100 <Ybl^A=PMHf@XeWLY3O[40
-I0TZNP39lfOTN4ei19m8z[2
-R1
-w1774938417
-8C:/USC CE/EE533/Lab10/Integration_2/src/arm_pipeline.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/arm_pipeline.v
-Z6 L0 18
-R2
-R3
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/arm_pipeline.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/arm_pipeline.v|
-!i113 0
+!s100 G?^9_ZAiAj010c:6[D@F20
+In1h6lOb2Z]cY4BG1dKZP=2
+R0
+w1775008594
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_pipeline.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_pipeline.v
+Z7 L0 18
 R4
 R5
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_pipeline.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_pipeline.v|
+!i113 0
+R6
+R1
 varm_regfile
-R0
+R2
 r1
 !s85 0
 31
 !i10b 1
-!s100 [96fUT<MoDPjioMJF6_I=3
-I1DeNZ=JO_K84Emi:L7ceQ0
-R1
-Z7 w1773503830
-8C:/USC CE/EE533/Lab10/Integration_2/src/arm_regfile.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/arm_regfile.v
-L0 11
-R2
-Z8 !s108 1774938424.000000
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/arm_regfile.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/arm_regfile.v|
-!i113 0
+!s100 Xb<XzkaV>g4OYP1fUGOm@0
+IYFEG7Q8g?lbhP6mW2RPP83
+R0
+w1775008455
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_regfile.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_regfile.v
+Z8 L0 11
 R4
 R5
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_regfile.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_regfile.v|
+!i113 0
+R6
+R1
 vbf16_mac
-R0
+R2
 r1
 !s85 0
 31
 !i10b 1
 !s100 m2V;XCmjceXS6g^@iz92Y2
-I`WK=^lRD3Mz=OcNDFO8AJ0
-R1
-R7
-8C:/USC CE/EE533/Lab10/Integration_2/src/bf16_mac.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/bf16_mac.v
+I9X:ck@h7Ai`@aW:P5Le_D2
+R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/bf16_mac.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/bf16_mac.v
 L0 1
-R2
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/bf16_mac.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/bf16_mac.v|
-!i113 0
 R4
-R5
+Z9 !s108 1775008604.000000
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/bf16_mac.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/bf16_mac.v|
+!i113 0
+R6
+R1
+vconvertible_fifo
+Z10 !s110 1775008604
+!i10b 1
+!s100 VaIQIAF>i@L`EzL87GF<=3
+IMfh_<D=Sa9P8;gTN1AR]U0
+R2
+R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/convertible_fifo.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/convertible_fifo.v
+R8
+R4
+r1
+!s85 0
+31
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/convertible_fifo.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/convertible_fifo.v|
+!i113 0
+R6
+R1
 vdmem_32
-R0
+R2
 r1
 !s85 0
 31
 !i10b 1
-!s100 n^KKMQz;<emklUCd47Y2>0
-Inkk0[jm=MC^@K1jnUG2g;1
-R1
-w1774920372
-8C:/USC CE/EE533/Lab10/Integration_2/src/dmem_32.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/dmem_32.v
+!s100 FPdf`IF4>keQ6JF6<@omZ0
+IS564gkRY]JTBARKCMDhj52
+R0
+w1775007214
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/dmem_32.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/dmem_32.v
 L0 23
-R2
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/dmem_32.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/dmem_32.v|
-!i113 0
 R4
-R5
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/dmem_32.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/dmem_32.v|
+!i113 0
+R6
+R1
 vfifo_top_tb
-R0
+R2
 r1
 !s85 0
 31
 !i10b 1
-!s100 6jjJmb;POAkk3=3ho[]1X3
-IGnVmdGog3NDoDYJTTkChl2
-R1
-w1774938112
-8C:/USC CE/EE533/Lab10/Integration_2/testbench/fifo_top_tb.v
-FC:/USC CE/EE533/Lab10/Integration_2/testbench/fifo_top_tb.v
-L0 20
-R2
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/testbench/fifo_top_tb.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/testbench/fifo_top_tb.v|
-!i113 0
-R4
-R5
-vgpu_core_min
+!s100 YaI^EOTg3PUj5eW3gFDfB0
+IB;YSL183U<^5:BSS0CJCM0
 R0
+w1775006437
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/testbench/fifo_top_tb.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/testbench/fifo_top_tb.v
+L0 20
+R4
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/testbench/fifo_top_tb.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/testbench/fifo_top_tb.v|
+!i113 0
+R6
+R1
+vgpu_core_min
+R2
 r1
 !s85 0
 31
 !i10b 1
 !s100 <T5n9M31E7MJGZ_g:`emF3
-IDLBSGjF72;m]ARlE@haA23
-R1
-w1774935228
-8C:/USC CE/EE533/Lab10/Integration_2/src/gpu_core_min.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/gpu_core_min.v
-L0 27
-R2
-R8
-!s107 C:\USC CE\EE533\Lab10\Integration_2\src\isa_defines.vh|C:/USC CE/EE533/Lab10/Integration_2/src/gpu_core_min.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/gpu_core_min.v|
-!i113 0
-R4
-R5
-vgpu_imem
+IU:Q5ZiIE[Y:gDz:Gl>7dZ3
 R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_core_min.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_core_min.v
+L0 27
+R4
+R9
+!s107 C:\USC CE\EE533\Lab10\ARMCPU_GPU_Integration\src\isa_defines.vh|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_core_min.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_core_min.v|
+!i113 0
+R6
+R1
+vgpu_imem
+R2
 r1
 !s85 0
 31
 !i10b 1
 !s100 FH8k@D33WUV_1CKKZXB?51
-I1_??;Qcmh1Rl3bCEAD^nb3
-R1
-w1774920402
-8C:/USC CE/EE533/Lab10/Integration_2/src/gpu_imem.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/gpu_imem.v
-L0 16
-R2
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/gpu_imem.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/gpu_imem.v|
-!i113 0
-R4
-R5
-vgpu_ldst
+In6AW?zh41elYEPA57AOT30
 R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_imem.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_imem.v
+L0 16
+R4
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_imem.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_imem.v|
+!i113 0
+R6
+R1
+vgpu_ldst
+R2
 r1
 !s85 0
 31
 !i10b 1
 !s100 ?k5ZDHG^EAXXb2?cZgO8M3
-IRJ>S=^a3ITeF@AUSm:XkR3
-R1
-R7
-8C:/USC CE/EE533/Lab10/Integration_2/src/gpu_ldst.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/gpu_ldst.v
-R6
-R2
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/gpu_ldst.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/gpu_ldst.v|
-!i113 0
-R4
-R5
-vgpu_net
+IDmefN]<>4b_@m@GkcQJ>z0
 R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_ldst.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_ldst.v
+R7
+R4
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_ldst.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_ldst.v|
+!i113 0
+R6
+R1
+vgpu_net
+R2
 r1
 !s85 0
 31
 !i10b 1
 !s100 UXeTbY_i:miS^[n]@z<:c2
-IKH5_Q:B7V?CO<:OUE[n]e2
-R1
-w1774920412
-8C:/USC CE/EE533/Lab10/Integration_2/src/gpu_net.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/gpu_net.v
+I:I:S;MXbXV`F7a[8RRBHN1
+R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_net.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_net.v
 L0 5
-R2
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/gpu_net.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/gpu_net.v|
-!i113 0
 R4
-R5
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_net.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_net.v|
+!i113 0
+R6
+R1
 vgpu_pc
-!s110 1774938424
+R10
 !i10b 1
 !s100 lA^XOP:L7R>fCDN8=fAGM1
-IoaD^^El8ZI^QQ[6;AR[lT2
-R0
-R1
-R7
-8C:/USC CE/EE533/Lab10/Integration_2/src/gpu_pc.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/gpu_pc.v
-L0 6
+I3cX<geBT20KhdalQN0=S42
 R2
+R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_pc.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_pc.v
+L0 6
+R4
 r1
 !s85 0
 31
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/gpu_pc.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/gpu_pc.v|
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_pc.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_pc.v|
 !i113 0
-R4
-R5
+R6
+R1
 vgpu_regfile_min
-R0
+R2
 r1
 !s85 0
 31
 !i10b 1
 !s100 G61>PREFjXQ43]T=164n:1
-I6M];Iac>P?`Nnl[j4?nOL3
-R1
-R7
-8C:/USC CE/EE533/Lab10/Integration_2/src/gpu_regfile_min.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/gpu_regfile_min.v
-Z9 L0 15
-R2
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/gpu_regfile_min.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/gpu_regfile_min.v|
-!i113 0
-R4
-R5
-vimem
+InQ3Ci4WNO5JjNB6S8@JTg0
 R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_regfile_min.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_regfile_min.v
+Z11 L0 15
+R4
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_regfile_min.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_regfile_min.v|
+!i113 0
+R6
+R1
+vimem
+R2
 r1
 !s85 0
 31
 !i10b 1
 !s100 o^3RFj3joJcF9Zb;RXLj01
-I8WW<]R2>N]6z=0KhLfaTU3
-R1
-w1774920363
-8C:/USC CE/EE533/Lab10/Integration_2/src/imem.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/imem.v
-L0 21
-R2
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/imem.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/imem.v|
-!i113 0
-R4
-R5
-vtensor_unit
+IdGhS67d:_dSOWBfLiS`dS1
 R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/imem.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/imem.v
+L0 21
+R4
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/imem.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/imem.v|
+!i113 0
+R6
+R1
+vtensor_unit
+R2
 r1
 !s85 0
 31
 !i10b 1
 !s100 blhX_N_F>3>B`253`anSm2
-IHK_nG_iZ7DKDNhKdPB9^R2
-R1
-w1774920533
-8C:/USC CE/EE533/Lab10/Integration_2/src/tensor_unit.v
-FC:/USC CE/EE533/Lab10/Integration_2/src/tensor_unit.v
-R9
-R2
-R8
-!s107 C:/USC CE/EE533/Lab10/Integration_2/src/tensor_unit.v|
-!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/Integration_2/src/tensor_unit.v|
-!i113 0
+I0^kk1Rji;1[X^[>X6STB22
+R0
+R3
+8C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/tensor_unit.v
+FC:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/tensor_unit.v
+R11
 R4
-R5
+R9
+!s107 C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/tensor_unit.v|
+!s90 -reportprogress|300|-work|work|-vopt|-stats=none|C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/tensor_unit.v|
+!i113 0
+R6
+R1

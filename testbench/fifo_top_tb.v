@@ -376,7 +376,8 @@ module fifo_top_tb;
         $display("[4b] Verify ARM DMEM results (expect 1 .. 14)");
         arm_prog_en  = 1'b1;   // re-enable prog mode for DMEM readback
         arm_dmem_sel = 1'b1;
-        @(posedge clk); #1;
+        // NOTE: no extra clock cycle here — arm_dmem_read task already
+        // handles the full 2-cycle BRAM latency internally.
 
         // Each check uses a fixed label string — no $sformatf needed.
         // We display the index from $display inside the loop instead.

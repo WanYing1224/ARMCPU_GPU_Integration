@@ -1,102 +1,106 @@
-{C:/USC CE/EE533/Lab10/Integration_2/src/imem.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/imem.v}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module imem
-
-Top level modules:
-	imem
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/arm_alu.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/arm_alu.v}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module arm_alu
-
-Top level modules:
-	arm_alu
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/tensor_unit.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/tensor_unit.v}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module tensor_unit
-
-Top level modules:
-	tensor_unit
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/isa_defines.vh} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/isa_defines.vh}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_ldst.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_ldst.v}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module gpu_ldst
-
-Top level modules:
-	gpu_ldst
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/testbench/fifo_top_tb.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/testbench/fifo_top_tb.v}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module fifo_top_tb
-
-Top level modules:
-	fifo_top_tb
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_regfile_min.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_regfile_min.v}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module gpu_regfile_min
-
-Top level modules:
-	gpu_regfile_min
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/arm_regfile.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/arm_regfile.v}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module arm_regfile
-
-Top level modules:
-	arm_regfile
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_pc.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_pc.v}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module gpu_pc
-
-Top level modules:
-	gpu_pc
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/arm_cpu_wrapper.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/arm_cpu_wrapper.v}
-Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module arm_cpu_wrapper
-
-Top level modules:
-	arm_cpu_wrapper
-
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_core_min.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_core_min.v}
+{C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_core_min.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_core_min.v}
 Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
 -- Compiling module gpu_core_min
 
 Top level modules:
 	gpu_core_min
 
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/dmem_32.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/dmem_32.v}
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_alu.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_alu.v}
 Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module dmem_32
+-- Compiling module arm_alu
 
 Top level modules:
-	dmem_32
+	arm_alu
 
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_net.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_net.v}
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/tensor_unit.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/tensor_unit.v}
 Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
--- Compiling module gpu_net
+-- Compiling module tensor_unit
 
 Top level modules:
-	gpu_net
+	tensor_unit
 
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_imem.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/gpu_imem.v}
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/testbench/fifo_top_tb.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/testbench/fifo_top_tb.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module fifo_top_tb
+
+Top level modules:
+	fifo_top_tb
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_imem.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_imem.v}
 Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
 -- Compiling module gpu_imem
 
 Top level modules:
 	gpu_imem
 
-} {} {}} {C:/USC CE/EE533/Lab10/Integration_2/src/bf16_mac.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/Integration_2/src/bf16_mac.v}
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_regfile_min.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_regfile_min.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module gpu_regfile_min
+
+Top level modules:
+	gpu_regfile_min
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_regfile.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_regfile.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module arm_regfile
+
+Top level modules:
+	arm_regfile
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/dmem_32.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/dmem_32.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module dmem_32
+
+Top level modules:
+	dmem_32
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/bf16_mac.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/bf16_mac.v}
 Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
 -- Compiling module bf16_mac
 
 Top level modules:
 	bf16_mac
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_cpu_wrapper.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/arm_cpu_wrapper.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module arm_cpu_wrapper
+
+Top level modules:
+	arm_cpu_wrapper
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/imem.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/imem.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module imem
+
+Top level modules:
+	imem
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/convertible_fifo.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/convertible_fifo.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module convertible_fifo
+
+Top level modules:
+	convertible_fifo
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_ldst.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_ldst.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module gpu_ldst
+
+Top level modules:
+	gpu_ldst
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_net.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_net.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module gpu_net
+
+Top level modules:
+	gpu_net
+
+} {} {}} {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_pc.v} {1 {vlog -work work -vopt -stats=none {C:/USC CE/EE533/Lab10/ARMCPU_GPU_Integration/src/gpu_pc.v}
+Model Technology ModelSim SE-64 vlog 10.6e Compiler 2018.06 Jun 23 2018
+-- Compiling module gpu_pc
+
+Top level modules:
+	gpu_pc
 
 } {} {}}

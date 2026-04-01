@@ -27,6 +27,16 @@ module arm_regfile (
     (* RAM_STYLE = "BLOCK" *) reg [31:0] regs_a [0:63];
     (* RAM_STYLE = "BLOCK" *) reg [31:0] regs_b [0:63];
 
+    integer k;
+    initial begin
+        for (k = 0; k < 64; k = k + 1) begin
+            regs_a[k] = 32'h0;
+            regs_b[k] = 32'h0;
+        end
+        r0data = 32'h0;
+        r1data = 32'h0;
+    end
+    
     wire [5:0] ra0 = {thread_id, r0addr};
     wire [5:0] ra1 = {thread_id, r1addr};
     wire [5:0] wa  = we2 ? {wb_thread, waddr2} : {wb_thread, waddr};

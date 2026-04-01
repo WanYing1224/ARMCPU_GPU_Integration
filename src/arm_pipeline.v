@@ -522,14 +522,16 @@ module arm_pipeline (
     // =========================================================
     // Stage 4: MEM (UNCHANGED — dmem Port B wired to ext_dmem_*)
     // =========================================================
-    wire [7:0]  dmem_addr = exmem_alu_result[9:2];
+    wire [7:0]  dmem_addr = ex_result[9:2];       // EX stage (matches wea and dina)
     wire [31:0] dmem_read_data;
 
     dmem_32 dmem_inst (
         .clka  (clk),
         .wea   (idex_mem_write && cond_met),
+        // .wea   (exmem_mem_write && exmem_cond_met),
         .addra (dmem_addr),
         .dina  (ex_store_data),
+        //.dina  (exmem_store_data),
         .douta (dmem_read_data),
         .clkb  (clk),
         .web   (ext_dmem_web),
