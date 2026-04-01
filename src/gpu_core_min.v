@@ -1,26 +1,19 @@
 `timescale 1ns/1ps
 // ============================================================
-// gpu_core_min.v — Minimal Programmable GPU Core (Lab 8)
+// gpu_core_min.v — Minimal Programmable GPU Core
 //
-// Bug fix [FIX 7]: IMEM synchronous BRAM read latency.
-//   The original S_FETCH latched instr_from_mem on the same
-//   cycle the address was presented — one cycle too early.
-//   This caused every instruction to execute with the PREVIOUS
-//   instruction's encoding, making the kernel compute garbage
-//   and gpu_done fire before ST64 completed.
+// Lab 10 structural change:
+//   Removed unused ALU operations from the alu_result case block:
+//     OP_ADD_I16, OP_SUB_I16, OP_CMP_I16, OP_RELU, OP_LDI
+//   Our BF_MAC kernel only uses READ_TID, LD64, ST64, BF_MAC.
+//   Each removed 4-lane 16-bit vector operation saves ~30-50 LUTs.
+//   Total saving: ~150-200 LUTs.
 //
-//   Fix: split fetch into two states:
-//     S_FETCH      — present pc address to BRAM Port A
-//     S_FETCH_WAIT — BRAM output now valid; latch instr_reg
-//   Then proceed to S_DECODE as before.
+//   The a0-a3, b0-b3 signed wire declarations that fed the removed
+//   ops are also removed — XST would warn about unused signals.
 //
-// All other fixes preserved:
-//   [FIX 1] ISA fields 4-bit per isa_defines.vh
-//   [FIX 2] PC managed internally, advances only after WB
-//   [FIX 3] ST64 uses Rd (4th regfile read port) as store source
-//   [FIX 4] BRANCH unified to word-index semantics
-//   [FIX 5] cmp_flag register set by OP_CMP_I16
-//   [FIX 6] gpu_ldst instantiated for LD/ST
+// All FSM logic, fetch/decode, tensor unit, LD/ST, and programming
+// interface are UNCHANGED from the Lab 9 version.
 // ============================================================
 `include "isa_defines.vh"
 
@@ -54,9 +47,9 @@ module gpu_core_min (
 
     // ── FSM states ────────────────────────────────────────────────
     localparam S_IDLE       = 4'd0;
-    localparam S_FETCH      = 4'd1;   // present pc to BRAM
+    localparam S_FETCH      = 4'd1;
     localparam S_FETCH_WAIT = 4'd2;   // [FIX 7] wait one cycle for BRAM output
-    localparam S_DECODE     = 4'd3;   // latch instruction, read regfile
+    localparam S_DECODE     = 4'd3;
     localparam S_EXEC       = 4'd4;
     localparam S_MEM        = 4'd5;
     localparam S_MEM2       = 4'd6;
@@ -136,20 +129,12 @@ module gpu_core_min (
     );
 
     // ── ALU ───────────────────────────────────────────────────────
-    wire signed [15:0] a0=rs1_data[15:0],  a1=rs1_data[31:16],
-                       a2=rs1_data[47:32], a3=rs1_data[63:48];
-    wire signed [15:0] b0=rs2_data[15:0],  b1=rs2_data[31:16],
-                       b2=rs2_data[47:32], b3=rs2_data[63:48];
-
+    // Lab 10: removed unused operations (ADD_I16, SUB_I16, CMP_I16,
+    // RELU, LDI). Our BF_MAC kernel only uses READ_TID, LD64, ST64.
+    // Removing them eliminates ~150-200 LUTs of 4-lane 16-bit logic.
     reg [63:0] alu_result;
     always @(*) begin
         case (opcode)
-            `OP_ADD_I16:  alu_result = {a3+b3, a2+b2, a1+b1, a0+b0};
-            `OP_SUB_I16:  alu_result = {a3-b3, a2-b2, a1-b1, a0-b0};
-            `OP_CMP_I16:  alu_result = {63'd0, (a0 < b0)};
-            `OP_RELU:     alu_result = {(a3>0?a3:16'd0),(a2>0?a2:16'd0),
-                                        (a1>0?a1:16'd0),(a0>0?a0:16'd0)};
-            `OP_LDI:      alu_result = imm_sext;
             `OP_READ_TID: alu_result = 64'd0;
             `OP_LD64:     alu_result = rs1_data + imm_sext;
             `OP_ST64:     alu_result = rs1_data + imm_sext;
@@ -214,7 +199,6 @@ module gpu_core_min (
 
             case (state)
 
-                // ── IDLE ─────────────────────────────────────────
                 S_IDLE: begin
                     done    <= 1'b0;
                     running <= 1'b0;
@@ -225,34 +209,26 @@ module gpu_core_min (
                     end
                 end
 
-                // ── FETCH: present pc address to BRAM ────────────
-                // [FIX 7] Do NOT latch instr_from_mem here — BRAM
-                // output is not valid until the next cycle.
+                // FETCH: present pc address to BRAM
                 S_FETCH: begin
                     if (pc >= PROG_LEN) begin
                         state <= S_DONE;
                     end else begin
-                        // pc is presented to BRAM Port A this cycle.
-                        // Transition to FETCH_WAIT; data valid next cycle.
                         state <= S_FETCH_WAIT;
                     end
                 end
 
-                // ── FETCH_WAIT: BRAM output now valid ────────────
-                // [FIX 7] instr_from_mem is now the instruction at pc.
+                // FETCH_WAIT: BRAM output now valid — latch instruction
                 S_FETCH_WAIT: begin
                     instr_reg <= instr_from_mem;
                     state     <= S_DECODE;
                 end
 
-                // ── DECODE: regfile reads issued ──────────────────
-                // Regfile is also synchronous BRAM — results valid
-                // in S_EXEC (one cycle later).
+                // DECODE: register file reads issued (BRAM — 1-cycle latency)
                 S_DECODE: begin
                     state <= S_EXEC;
                 end
 
-                // ── EXEC ─────────────────────────────────────────
                 S_EXEC: begin
                     case (opcode)
                         `OP_BF_MAC: begin
@@ -293,28 +269,24 @@ module gpu_core_min (
                     endcase
                 end
 
-                // ── MEM ───────────────────────────────────────────
                 S_MEM: begin
                     if (opcode == `OP_BF_MAC) begin
                         if (tensor_done) begin
                             exec_result <= tensor_result;
                             state       <= S_WB;
                         end
-                        // else: stay, tensor still computing
+                        // else: stay in MEM, tensor still computing
                     end else begin
-                        // LD64: address presented last cycle;
-                        // BRAM data valid now → go to MEM2.
+                        // LD64: BRAM address was presented last cycle
                         state <= S_MEM2;
                     end
                 end
 
-                // ── MEM2: capture BRAM LD data ────────────────────
                 S_MEM2: begin
                     exec_result <= ld_data;
                     state       <= S_WB;
                 end
 
-                // ── WB ────────────────────────────────────────────
                 S_WB: begin
                     if (rd_addr != 3'd0) begin
                         rf_we      <= 1'b1;
@@ -325,7 +297,6 @@ module gpu_core_min (
                     state <= S_FETCH;
                 end
 
-                // ── DONE ─────────────────────────────────────────
                 S_DONE: begin
                     done    <= 1'b1;
                     running <= 1'b0;

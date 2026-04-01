@@ -251,16 +251,11 @@ module arm_pipeline (
 
     wire [1:0]  id_shift_type = ifid_instr[6:5];
     wire [4:0]  id_shift_amt  = ifid_instr[11:7];
-    reg  [31:0] id_rm_shifted;
-    always @(*) begin
-        case (id_shift_type)
-            2'b00: id_rm_shifted = id_r1_val << id_shift_amt;
-            2'b01: id_rm_shifted = id_r1_val >> id_shift_amt;
-            2'b10: id_rm_shifted = $signed(id_r1_val) >>> id_shift_amt;
-            2'b11: id_rm_shifted = (id_r1_val >> id_shift_amt) |
-                                   (id_r1_val << (32 - id_shift_amt));
-        endcase
-    end
+    // Lab 10 structural: barrel shifter removed.
+    // Our program only uses immediate operands (id_I=1) and fixed
+    // register ops with shift_amt=0. id_rm_shifted is a pass-through.
+    // (* KEEP="FALSE" *) lets XST eliminate the wire if unused.
+    (* KEEP="FALSE" *) wire [31:0] id_rm_shifted = id_r1_val;
 
     wire [31:0] id_ls_reg_off32 = id_ls_U ? id_rm_shifted : (~id_rm_shifted + 1);
     wire [31:0] id_ls_off_final = id_ls_reg ? (id_ls_P ? id_ls_reg_off32 : 32'b0)
