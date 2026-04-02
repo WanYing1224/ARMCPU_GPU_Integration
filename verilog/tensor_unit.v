@@ -26,13 +26,13 @@ module tensor_unit (
     // 4 parallel bf16_mac (GPU group's combinational module)
     wire [15:0] mac0, mac1, mac2, mac3;
 
-    bf16_mac lane0 (.a(rs1[15:0]),  .b(rs2[15:0]),
+    bf16_mac lane0 (.clk(clk), .a(rs1[15:0]),  .b(rs2[15:0]),
                     .c(rs3[15:0]),  .z(mac0));
-    bf16_mac lane1 (.a(rs1[31:16]), .b(rs2[31:16]),
+    bf16_mac lane1 (.clk(clk), .a(rs1[31:16]), .b(rs2[31:16]),
                     .c(rs3[31:16]), .z(mac1));
-    bf16_mac lane2 (.a(rs1[47:32]), .b(rs2[47:32]),
+    bf16_mac lane2 (.clk(clk), .a(rs1[47:32]), .b(rs2[47:32]),
                     .c(rs3[47:32]), .z(mac2));
-    bf16_mac lane3 (.a(rs1[63:48]), .b(rs2[63:48]),
+    bf16_mac lane3 (.clk(clk), .a(rs1[63:48]), .b(rs2[63:48]),
                     .c(rs3[63:48]), .z(mac3));
 
     // 1-cycle pipeline register to meet timing (optional but safe)
