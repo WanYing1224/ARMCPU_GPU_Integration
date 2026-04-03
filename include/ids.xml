@@ -3,7 +3,7 @@
 	<nf:name>fifo</nf:name>
 	<nf:prefix>fifo</nf:prefix>
 	<nf:location>udp</nf:location>
-	<nf:description>Convertible FIFO / Network Processor Register Interface (Lab 8)</nf:description>
+	<nf:description>Convertible FIFO / Network Processor Register Interface</nf:description>
 	<nf:blocksize>256</nf:blocksize>
 	<nf:registers>
 
