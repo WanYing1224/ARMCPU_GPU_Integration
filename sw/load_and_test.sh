@@ -220,8 +220,8 @@ reg_write $CMD_REG 0x00
 echo ""
 echo "[7] Start GPU and verify BFloat16 FMA"
 
-reg_write $CMD_REG $(printf "0x%02x" $CMD_GPU_START)
-reg_write $CMD_REG 0x00
+reg_write $CMD_REG $(printf "0x%02x" $(( CMD_GPU_START | 1 )))
+reg_write $CMD_REG 0x01
 
 echo "    waiting for gpu_done..."
 for (( i=0; i<TIMEOUT; i++ )); do
